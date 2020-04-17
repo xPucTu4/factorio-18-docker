@@ -60,7 +60,7 @@ function showHelp()
     echo "2 - Check for new version"
     echo "3 - Download latest (known) version"
     echo "4 - Create new map with name format Year-Month-Day-Hour-Minute-Seconds-RANDOM_STRING"
-    echo "5 - Edit config files"
+    echo "5 - Edit config files (USE F9 to open file and F9 to save changes instead of F4/F2)"
     echo "0 - Quit (exit the container)"
 }
 

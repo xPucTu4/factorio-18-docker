@@ -8,6 +8,8 @@ RUN ln -s /usr/bin/nano /usr/bin/pico && \
  mkdir /factorio/mods/ && \
  mkdir /factorio/conf/
 
+# Because of a bug in docker, edit/save key is changed to F9
+COPY mc.default.keymap /etc/mc/
 COPY loop.sh /
 
 ENTRYPOINT ["/bin/bash"]
