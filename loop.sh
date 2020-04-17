@@ -7,6 +7,8 @@ autotimer=30
 binpath="/factorio/factorio/bin/x64/factorio"
 currentversion=0
 $lmn=""
+
+moreopts="--map-gen-settings  --map-settings -C "
 function updatelmn()
 {
     if [ -f "/factorio/lmn" ]
@@ -68,8 +70,9 @@ function persistConfig()
 {
     for f in map-gen-settings map-settings server-settings server-whitelist
     do
-	if [ ! -f "/factorio/data/$f.json" ]
+	if [ ! -f "/factorio/conf/$f.json" ]
 	then
+	    echo "Copying conf example: $f"
 	    cp "/factorio/factorio/data/$f.example.json" "/factorio/conf/$f.json"
 	fi
 	cp "/factorio/conf/$f.json" "/factorio/factorio/data/"
@@ -100,11 +103,13 @@ do
 		    if [ ! -f "/factorio/maps/$lmn/map.zip" ]
 		    then
 			echo "We should create the map first"
+			persistConfig
 			$binpath --create "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/
 			echo "Created new map"
 			sleep 2
 		    fi
 		    echo "Using map name '$lmn'"
+		    persistConfig
 		    $binpath --start-server "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/
 		fi
 	    fi
@@ -123,6 +128,7 @@ do
 	    else
 		TFN="/tmp/factorio-"`date +"%s"`-`dd if=/dev/urandom status=none count=$((1024*8)) | md5sum | cut -f1 -d " "`-`date +"%s"`".tar.gz"
 		wget -O $TFN "https://factorio.com/get-download/"`cat /factorio/lkv`"/headless/linux64"
+#cp /linux64-0.18.18.tar.gz $TFN
 		cd /tmp
 		rm -fr factorio
 		tar xfv $TFN
