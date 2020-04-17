@@ -1,0 +1,16 @@
+# Build with --no-cache option
+FROM frolvlad/alpine-glibc
+RUN apk add bash nano mc wget
+RUN apk add curl
+RUN ln -s /usr/bin/nano /usr/bin/pico && \
+ mkdir /factorio/ && \
+ mkdir /factorio/maps/ && \
+ mkdir /factorio/mods/ && \
+ mkdir /factorio/conf/
+
+COPY loop.sh /
+
+ENTRYPOINT ["/bin/bash"]
+CMD ["/loop.sh"]
+
+EXPOSE 34197/udp
