@@ -5,10 +5,13 @@
 
 autotimer=30
 binpath="/factorio/factorio/bin/x64/factorio"
+cfgdir="/factorio/conf/"
 currentversion=0
 $lmn=""
 
-moreopts="--map-gen-settings  --map-settings -C "
+
+
+moreopts="--map-gen-settings ${cfgdir}map-gen-settings.json --map-settings ${cfgdir}map-settings.json --server-settings ${cfgdir}server-settings.json"
 function updatelmn()
 {
     if [ -f "/factorio/lmn" ]
@@ -104,13 +107,13 @@ do
 		    then
 			echo "We should create the map first"
 			persistConfig
-			$binpath --create "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/
+			$binpath --create "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/ $moreopts
 			echo "Created new map"
 			sleep 2
 		    fi
 		    echo "Using map name '$lmn'"
 		    persistConfig
-		    $binpath --start-server "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/
+		    $binpath --start-server "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/ $moreopts
 		fi
 	    fi
     	elif [ "$uin" == "2" ]
@@ -119,6 +122,8 @@ do
 	    wget -O $TFN -o /dev/null "https://factorio.com/download-headless/experimental"
 	    cat $TFN | grep " (64 bit" | head -n1 | cut -f3 -d "/" > /factorio/lkv
 	    rm $TFN
+	    echo "Version check completed"
+	    sleep 1.5
 	elif [ "$uin" == "3" ]
 	then
 	    if [ ! -f "/factorio/lkv" ]
@@ -137,6 +142,7 @@ do
 		rm -fr factorio
 		ln -s /factorio/`cat /factorio/lkv` /factorio/factorio
 		persistConfig
+		rm $TFN
 	    fi
 	elif [ "$uin" == "4" ]
 	then
