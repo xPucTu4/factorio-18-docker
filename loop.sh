@@ -9,6 +9,7 @@ binpath="/factorio/factorio/bin/x64/factorio"
 cfgdir="/factorio/conf/"
 currentversion=0
 $lmn=""
+defaultSleep=1.5
 
 
 
@@ -102,13 +103,13 @@ do
 	    if [ "$lmn" == "" ]
 	    then
 		echo "Please create new map name first."
-		sleep 3
+		sleep $defaultSleep
 	    else
 		echo "Start the server"
 		if [ ! -f $binpath ]
 		then
 		    echo "Cannot start. Server is not downloaded."
-		    sleep 5
+		    sleep $defaultSleep
 		else
 		    if [ ! -f "/factorio/maps/$lmn/map.zip" ]
 		    then
@@ -116,7 +117,7 @@ do
 			persistConfig
 			$binpath --create "/factorio/maps/$lmn/map" --mod-directory /factorio/mods/ $moreopts
 			echo "Created new map"
-			sleep 2
+			sleep $defaultSleep
 		    fi
 		    echo "Using map name '$lmn'"
 		    persistConfig
@@ -125,20 +126,20 @@ do
 	    fi
     	elif [ "$uin" == "2" ]
 	then
-	    TFN="/tmp/factorio-"`date +"%s%s%s"`-`dd if=/dev/urandom status=none count=$((1024*4)) | md5sum | cut -f1 -d " "`-`date +"%s-%s"`
+	    TFN=$(mktemp)
 	    wget -O $TFN -o /dev/null "https://factorio.com/download-headless/experimental"
 	    cat $TFN | grep " (64 bit" | head -n1 | cut -f3 -d "/" > /factorio/lkv
 	    rm $TFN
 	    echo "Version check completed"
-	    sleep 0.5
+	    sleep $defaultSleep
 	elif [ "$uin" == "3" ]
 	then
 	    if [ ! -f "/factorio/lkv" ]
 	    then
 		echo "Please check for the latest version first"
-		sleep 5
+		sleep $defaultSleep
 	    else
-		TFN="/tmp/factorio-"`date +"%s"`-`dd if=/dev/urandom status=none count=$((1024*8)) | md5sum | cut -f1 -d " "`-`date +"%s"`".tar.gz"
+		TFN=$(mktemp)
 		wget -O $TFN "https://factorio.com/get-download/"`cat /factorio/lkv`"/headless/linux64"
 #cp /linux64-0.18.18.tar.gz $TFN
 		cd /tmp
@@ -154,7 +155,7 @@ do
 	elif [ "$uin" == "4" ]
 	then
 	    echo "Creating new map"
-	    mapName=`date +"%Y-%m-%d-%H-%M-%S"`-`dd if=/dev/urandom status=none count=$((1024*16)) | sha256sum | cut -f1 -d " "`
+	    mapName=`date +"%Y-%m-%d-%H-%M-%S"`"-$(getRandomString)"
 	    echo "$mapName" > /factorio/lmn
 	elif [ "$uin" == "5" ]
 	then
@@ -163,7 +164,7 @@ do
 	then
 	    clear
 	    echo "Exiting. BB."
-	    sleep 0.5
+	    sleep $defaultSleep
 	    exit
 	fi
     else
