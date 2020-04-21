@@ -21,8 +21,13 @@ function updatelmn()
 }
 
 
+function showContainerVersion()
+{
+    # The 0 is hardcoded because this is too early version
+    echo -e "\nContainer version is: 0."$CONTAINER_VERSION"\n\n"
+}
 
-function getMyVersion()
+function showMyVersion()
 {
     echo -e "\n\n\n"
     if [ ! -f $binpath ]
@@ -163,6 +168,7 @@ do
 	clear
 	#autostart
 	showHelp
-	getMyVersion
+	showMyVersion
+	showContainerVersion
     fi
 done
