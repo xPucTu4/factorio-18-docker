@@ -1,5 +1,7 @@
 #!/bin/bash
 
+/DockerPermissionFix
+
 clear
 . xPucTu4.sh
 
@@ -35,7 +37,7 @@ function updatelmn()
 function showContainerVersion()
 {
     # The 0 is hardcoded because this is too early version
-    echo -e "\nContainer version is: 0."$CONTAINER_VERSION"\n\n"
+    echo -e "\nContainer version is: 0."$IMAGE_VERSION", built on $IMAGE_DATE\n\n"
 }
 
 function showMyVersion()
