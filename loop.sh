@@ -40,7 +40,8 @@ function showMyVersion()
 
     if [ -f "/factorio/lkv" ]
     then
-	echo "Last known version is: "`cat /factorio/lkv`
+	echo -n "Last known version is: "`cat /factorio/lkv`
+	echo " (Last checked: "`stat -c %y /factorio/lkv`")"
     fi
     if [ -f "/factorio/lmn" ]
     then
@@ -128,7 +129,7 @@ do
 	    cat $TFN | grep " (64 bit" | head -n1 | cut -f3 -d "/" > /factorio/lkv
 	    rm $TFN
 	    echo "Version check completed"
-	    sleep 1.5
+	    sleep 0.5
 	elif [ "$uin" == "3" ]
 	then
 	    if [ ! -f "/factorio/lkv" ]
