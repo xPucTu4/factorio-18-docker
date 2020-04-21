@@ -13,7 +13,7 @@ COPY mc.default.keymap /etc/mc/
 
 #COPY linux64-0.18.18.tar.gz /
 
-
+COPY xPucTu4.sh /
 COPY loop.sh /
 
 # The container version (increaced by build.sh script)
