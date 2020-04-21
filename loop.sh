@@ -27,9 +27,9 @@ function mainLoop()
 moreopts="--map-gen-settings ${cfgdir}map-gen-settings.json --map-settings ${cfgdir}map-settings.json --server-settings ${cfgdir}server-settings.json"
 function updatelmn()
 {
-    if [ -f "/factorio/lmn" ]
+    if [ -f "/factorio/maps/lmn" ]
     then
-        lmn=`cat /factorio/lmn`
+        lmn=`cat /factorio/maps/lmn`
     fi
 }
 
@@ -56,7 +56,7 @@ function showMyVersion()
 	echo -n "Last known version is: "`cat /factorio/lkv`
 	echo " (Last checked: "`stat -c %y /factorio/lkv`")"
     fi
-    if [ -f "/factorio/lmn" ]
+    if [ -f "/factorio/maps/lmn" ]
     then
 	updatelmn
 	echo "Your last map name is: $lmn "
@@ -167,7 +167,7 @@ do
 	then
 	    echo "Creating new map"
 	    mapName=`date +"%Y-%m-%d-%H-%M-%S"`"-$(getRandomString)"
-	    echo "$mapName" > /factorio/lmn
+	    echo "$mapName" > /factorio/maps/lmn
 	elif [ "$uin" == "5" ]
 	then
 	    mc /factorio/conf/
