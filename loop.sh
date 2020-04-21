@@ -1,5 +1,6 @@
 #!/bin/bash
 
+clear
 . xPucTu4.sh
 
 # Below the variable $uin is short for User Input
@@ -8,9 +9,17 @@ autotimer=30
 binpath="/factorio/factorio/bin/x64/factorio"
 cfgdir="/factorio/conf/"
 currentversion=0
-$lmn=""
+lmn="" # last map name
 defaultSleep=1.5
 
+function mainLoop()
+{
+    clear
+    #autostart
+    showHelp
+    showMyVersion
+    showContainerVersion
+}
 
 
 moreopts="--map-gen-settings ${cfgdir}map-gen-settings.json --map-settings ${cfgdir}map-settings.json --server-settings ${cfgdir}server-settings.json"
@@ -53,7 +62,7 @@ function showMyVersion()
 	echo "You do not have any maps."
 	echo "To start the server you should first create a new map with option 4."
     fi
-    echo -e "\n\n\n"
+    echo -e "\n"
 }
 
 function autostart()
@@ -160,7 +169,7 @@ do
 	elif [ "$uin" == "5" ]
 	then
 	    mc /factorio/conf/
-	elif [ "$uin" == "0" ] || [ "$uin" == "q" ]
+	elif [ "$uin" == "0" ] || [[ "$uin" =~ [qQ] ]]
 	then
 	    clear
 	    echo "Exiting. BB."
@@ -168,10 +177,6 @@ do
 	    exit
 	fi
     else
-	clear
-	#autostart
-	showHelp
-	showMyVersion
-	showContainerVersion
+	mainLoop
     fi
 done

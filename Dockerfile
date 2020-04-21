@@ -1,21 +1,21 @@
 # Build with --no-cache option
-FROM frolvlad/alpine-glibc
-RUN apk add bash nano mc wget
-RUN apk add curl
-RUN ln -s /usr/bin/nano /usr/bin/pico && \
- mkdir /factorio/ && \
+FROM debian:10-slim
+RUN apt update
+RUN apt install -y nano mc wget
+RUN apt install -y curl
+RUN mkdir /factorio/ && \
  mkdir /factorio/maps/ && \
  mkdir /factorio/mods/ && \
  mkdir /factorio/conf/
-
-# Because of a bug with putty+docker+alpine the F2/F4 keys are replaced with F9
-COPY mc.default.keymap /etc/mc/
 
 #COPY linux64-0.18.18.tar.gz /
 
 COPY xPucTu4.sh /
 COPY loop.sh /
 
+# Change only the locale formatting
+ENV LC_CTYPE=C.UTF-8
+ENV EDITOR=mcedit
 # The container version (increaced by build.sh script)
 ENV CONTAINER_VERSION=1
 
