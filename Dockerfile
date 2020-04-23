@@ -1,11 +1,9 @@
 # Build with --no-cache option
-FROM docker-mirrors.d.arty.xpuctu4.net/dotnet-core/sdk:3.1.201-buster AS dnbuildar
-RUN apt-get update && apt-get install -y nano mc wget nmap
-RUN echo quit | openssl s_client -showcerts -servername arty.xpuctu4.net -connect arty.xpuctu4.net:443 > /etc/ssl/certs/xpuctu4.pem
+FROM golang AS gbuildar
+RUN mkdir -p /work/
 COPY dpf /work/
-WORKDIR /work/ 
-RUN dotnet restore -s https://arty.xpuctu4.net/artifactory/api/nuget/nuget-local
-RUN dotnet publish --no-restore -o out
+WORKDIR /work/
+RUN go build -o out/DockerPermissionFix program.go
 
 FROM debian:10-slim
 EXPOSE 34197/udp
@@ -20,7 +18,7 @@ RUN mkdir -p /factorio/ && \
 ENV LC_CTYPE=C.UTF-8
 ENV EDITOR=mcedit
 
-COPY --from=dnbuildar /work/out/DockerPermissionFix /
+COPY --from=gbuildar /work/out/DockerPermissionFix /
 RUN chmod 6755 /DockerPermissionFix
 
 RUN useradd -d /factorio/ -g users -M -r -s /bin/bash factorio && \
