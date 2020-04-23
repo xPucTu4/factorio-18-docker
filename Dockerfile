@@ -8,6 +8,7 @@ RUN dotnet restore -s https://arty.xpuctu4.net/artifactory/api/nuget/nuget-local
 RUN dotnet publish --no-restore -o out
 
 FROM debian:10-slim
+EXPOSE 34197/udp
 RUN apt update
 RUN apt install -y nano mc wget
 VOLUME /factorio/maps/
@@ -19,8 +20,6 @@ RUN mkdir -p /factorio/ && \
 ENV LC_CTYPE=C.UTF-8
 ENV EDITOR=mcedit
 
-COPY xPucTu4.sh /
-COPY loop.sh /
 COPY --from=dnbuildar /work/out/DockerPermissionFix /
 RUN chmod 6755 /DockerPermissionFix
 
@@ -30,6 +29,9 @@ RUN useradd -d /factorio/ -g users -M -r -s /bin/bash factorio && \
  chown -v factorio:users /factorio/mods/
 
 
+COPY autostart.sh /factorio/conf/
+COPY xPucTu4.sh /
+COPY loop.sh /
 USER factorio:users
 
 # The container version (increaced by build.sh script)
@@ -41,4 +43,3 @@ ENV IMAGE_DATE=$IMAGE_DATE
 ENTRYPOINT ["/bin/bash"]
 CMD ["/loop.sh"]
 
-EXPOSE 34197/udp

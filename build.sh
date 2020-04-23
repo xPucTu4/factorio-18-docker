@@ -21,4 +21,4 @@ read -r -d '' buildargs << EOARGS
 EOARGS
 
 eval `echo docker build ${buildargs} $opts --network dicknet -t "xpuctu4/factorio-18" .`
-#docker run --network dicknet --name "fffff-$(getRandomString 4)" -it --rm xpuctu4/factorio-18
+docker run --network dicknet --name "fffff-$(getRandomString 4)" -it --rm xpuctu4/factorio-18

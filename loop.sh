@@ -7,22 +7,24 @@ clear
 
 # Below the variable $uin is short for User Input
 
-autotimer=30
+inactivitycount=$autotimer
 binpath="/factorio/factorio/bin/x64/factorio"
 cfgdir="/factorio/conf/"
 currentversion=0
 lmn="" # last map name
 defaultSleep=1.5
 
+source ${cfgdir}autostart.sh
+if [ $autotimer -gt 0 ]; then autotimer=$[$autotimer*10];fi
+
 function mainLoop()
 {
     clear
-    #autostart
+    autostart
     showHelp
     showMyVersion
     showContainerVersion
 }
-
 
 moreopts="--map-gen-settings ${cfgdir}map-gen-settings.json --map-settings ${cfgdir}map-settings.json --server-settings ${cfgdir}server-settings.json"
 function updatelmn()
@@ -69,12 +71,15 @@ function showMyVersion()
 
 function autostart()
 {
-    echo "The server will be started in $autotimer seconds."
-    let autotimer="$autotimer - 1"
-    if [ $autotimer -le 0 ]
+    source ${cfgdir}autostart.sh
+    if [ $autotimer -gt 0 ]; then autotimer=$[$autotimer*10];fi
+    if [ $autotimer -eq 0 ]; then echo "Autostart is disabled"; return; fi
+
+    if [ -f $binpath ] && [ -f "/factorio/maps/lmn" ]
     then
-	autotimer=30
-	startserver
+        echo "The server will be started in $[$inactivitycount/10] seconds."
+    else
+	echo "Server is not ready for autostart, yet"
     fi
 }
 function showHelp()
@@ -105,8 +110,8 @@ function persistConfig()
 showHelp
 while true
 do
-    updatelmn
-    read -t 1 -n1 -s uin
+    read -t 0.1 -n1 -s uin
+    if [ $? -gt 128 ]; then let "inactivitycount--"; else inactivitycount=$autotimer; fi
     if [ ${#uin} -gt 0 ]
     then
 	if [ "$uin" == "1" ]
@@ -171,6 +176,7 @@ do
 	elif [ "$uin" == "5" ]
 	then
 	    mc /factorio/conf/
+	    mainLoop
 	elif [ "$uin" == "0" ] || [[ "$uin" =~ [qQ] ]]
 	then
 	    clear
