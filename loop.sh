@@ -143,8 +143,8 @@ do
     	elif [ "$uin" == "2" ]
 	then
 	    TFN=$(mktemp)
-	    wget -O $TFN -o /dev/null "https://factorio.com/download-headless/experimental"
-	    cat $TFN | grep " (64 bit" | head -n1 | cut -f3 -d "/" > /factorio/lkv
+	    wget -O $TFN -o /dev/null "https://factorio.com/download"
+	    cat $TFN | grep -E "^(\s{3,})Exp\S* - [0-9.]{3,}$" | cut -f2 -d "-" | tr -d " " > /factorio/lkv
 	    rm $TFN
 	    echo "Version check completed"
 	    sleep $defaultSleep
