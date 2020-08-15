@@ -14,3 +14,14 @@ function getRandomString()
 }
 
 
+function checkNewVersion()
+{
+    TFN=$(mktemp)
+    wget -O $TFN -o /dev/null "https://factorio.com/download"
+#    cat $TFN | grep -E "^(\s{3,})Exp\S* - [0-9.]{3,}$" | cut -f2 -d "-" | tr -d " " > /factorio/lkv
+    echo $(cat $TFN | grep -E "\"/get-download/[0-9.]{5,}/headless" | cut -f2 -d '=' | tr -d '"' | cut -f3 -d '/') > /factorio/lkv
+    rm $TFN
+    echo "Version check completed"
+}
+
+checkNewVersion
