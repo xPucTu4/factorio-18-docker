@@ -2,6 +2,8 @@
 
 /DockerPermissionFix
 
+TERM="${TERM:-xterm}"
+
 clear
 . xPucTu4.sh
 
